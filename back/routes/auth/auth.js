@@ -7,13 +7,11 @@ router.post('/signup', (req, res, next) => {
   connection.query(
     'INSERT INTO users (email, password, name, lastname) VALUES (?,?,?,?)',
     [email, password, name, lastname],
-    (err, results) => {
-      if(err) {
-        res.status(500).send('Error');
-        res.end()
-      }else{
-        res.status(200).send('I am in POST signup');
-      }
+    (error, results) => {
+      if (error)
+        res.status(500).json({ flash: error.message });
+      else
+        res.status(200).json({ flash: "User has been signed up!" });
     }
   )
 });

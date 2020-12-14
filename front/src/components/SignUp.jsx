@@ -2,11 +2,13 @@ import React, { useState } from "react";
 
 const SignUp = () => {
   const [user, setUser] = useState({
-    email: "test@test.com",
-    password: "azerty",
-    name: "test",
-    lastname: "TEST",
+    email: "",
+    password: "",
+    name: "",
+    lastname: "",
   });
+
+  const [alert, setAlert] = useState("");
 
   const updateUser = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -14,7 +16,18 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
+    fetch("/auth/signup", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then(
+        (res) => setAlert(res.flash),
+        (err) => setAlert(err.flash)
+      );
   };
 
   return (
@@ -57,6 +70,7 @@ const SignUp = () => {
         </label>
         <input type="submit" />
       </form>
+      <p>{alert}</p>
     </>
   );
 };
