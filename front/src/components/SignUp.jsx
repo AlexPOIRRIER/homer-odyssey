@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Button, TextField, Icon, Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -7,11 +9,19 @@ const SignUp = () => {
     name: "",
     lastname: "",
   });
-
   const [alert, setAlert] = useState("");
+  const [open, setOpen] = useState(false);
 
   const updateUser = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -33,44 +43,63 @@ const SignUp = () => {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">
-          E-mail
-          <input type="email" name="email" id="email" onChange={updateUser} />
-        </label>
-        <label htmlFor="name">
-          Name
-          <input type="text" name="name" id="name" onChange={updateUser} />
-        </label>
-        <label htmlFor="lastname">
-          Lastname
-          <input
-            type="text"
-            name="lastname"
-            id="lastname"
-            onChange={updateUser}
-          />
-        </label>
-        <label htmlFor="password">
-          Password
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={updateUser}
-          />
-        </label>
-        <label htmlFor="passwordBis">
-          Confirm Password
-          <input
-            type="password"
-            name="passwordBis"
-            id="passwordBis"
-            onChange={updateUser}
-          />
-        </label>
-        <input type="submit" />
+        <TextField
+          type="email"
+          name="email"
+          id="email"
+          label="E-mail"
+          onChange={updateUser}
+        />
+        <TextField
+          type="text"
+          name="name"
+          id="name"
+          onChange={updateUser}
+          label="Name"
+        />
+        <TextField
+          type="text"
+          name="lastname"
+          id="lastname"
+          label="Lastname"
+          onChange={updateUser}
+        />
+        <TextField
+          type="password"
+          name="password"
+          id="password"
+          label="Password"
+          onChange={updateUser}
+        />
+        <TextField
+          type="password"
+          name="passwordBis"
+          id="passwordBis"
+          label="Confirm password"
+          onChange={updateUser}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          endIcon={<Icon>send</Icon>}
+          onClick={handleClick}
+          style={{ 'margin': '1rem' }}
+        >
+          Submit
+        </Button>
       </form>
-      <p>{alert}</p>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        {alert === "User has been signed up !" ? (
+          <Alert onClose={handleClose} severity="succes">
+            {alert}
+          </Alert>
+        ) : (
+          <Alert onClose={handleClose} severity="error">
+            {alert}
+          </Alert>
+        )}
+      </Snackbar>
     </>
   );
 };
